@@ -18,34 +18,34 @@ def parse_json_and_calculate(url):
 
     while True:
         # 不要なクォートを削除
-        response = requests.get(f'{url}&page={page}')
+        response = requests.get(f"{url}&page={page}")
         if response.ok:
             json_data = response.json()
 
-            articles = json_data['articles']
+            articles = json_data["articles"]
             article_count += len(articles)
-            total_liked_count += sum(article['liked_count'] for article in articles)
+            total_liked_count += sum(article["liked_count"] for article in articles)
 
-            if json_data['next_page'] is None:
+            if json_data["next_page"] is None:
                 try:
-                    user_name = articles[0]['publication']['display_name']
+                    user_name = articles[0]["publication"]["display_name"]
                 except Exception as e:
-                    user_name = articles[0]['user']['username']
+                    user_name = articles[0]["user"]["username"]
                     print(e)
 
                 return user_name, article_count, total_liked_count
             else:
-                page = json_data['next_page']
+                page = json_data["next_page"]
 
 
 # CSVファイルのパスを指定
-file_path = 'url_list.csv'
+file_path = "url_list.csv"
 
 # URLを格納するためのリストを初期化
 url_list = []
 
 # CSVファイルを開き、内容をリストに格納
-with open(file_path, mode='r', encoding='utf-8') as file:
+with open(file_path, mode="r", encoding="utf-8") as file:
     reader = csv.reader(file)
     for row in reader:
         url_list.append(row[0])  # 仮定として、URLは各行の最初の列にあるとします
